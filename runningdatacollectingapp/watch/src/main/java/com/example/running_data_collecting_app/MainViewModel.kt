@@ -101,8 +101,8 @@ class MainViewModel(
     val handleGyroscopeData = { data: FloatArray ->
         if (isStarted) {
             val currTS = System.currentTimeMillis()
-            val result = "${accelerometerCount},${currTS},${data[1]},${data[1]},${data[2]}"
-            accelerometerCount += 1;
+            val result = "${gyroscopeCount},${currTS},${data[0]},${data[1]},${data[2]}"
+            gyroscopeCount += 1
             sendMessageToHandHeld("/gyroscope", result)
         }
     }
@@ -110,8 +110,8 @@ class MainViewModel(
     val handleAccelerometerData = { data: FloatArray ->
         if (isStarted) {
             val currTS = System.currentTimeMillis()
-            val result = "${gyroscopeCount},${currTS},${data[1]},${data[1]},${data[2]}"
-            gyroscopeCount += 1;
+            val result = "${accelerometerCount},${currTS},${data[0]},${data[1]},${data[2]}"
+            accelerometerCount += 1
             sendMessageToHandHeld("/accelerometer", result)
         }
     }

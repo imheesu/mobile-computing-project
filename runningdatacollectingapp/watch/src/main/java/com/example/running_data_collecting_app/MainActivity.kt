@@ -32,7 +32,6 @@ class MainActivity : ComponentActivity() {
         super.onPause()
         messageClient.removeListener(viewModel)
         capabilityClient.removeListener(viewModel, CAPABILITY_PHONE_APP)
-        viewModel.messageClient = null
     }
 
     override fun onResume() {

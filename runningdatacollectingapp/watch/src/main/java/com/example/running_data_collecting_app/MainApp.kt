@@ -60,7 +60,7 @@ fun MainApp(viewModel: MainViewModel) {
             sensorManager.registerListener(
                 sensorEventListener,
                 accelerometerSensor,
-                SensorManager.SENSOR_DELAY_NORMAL
+                SensorManager.SENSOR_DELAY_GAME
             )
         }
 
@@ -69,7 +69,7 @@ fun MainApp(viewModel: MainViewModel) {
             sensorManager.registerListener(
                 sensorEventListener,
                 gyroscopeSensor,
-                SensorManager.SENSOR_DELAY_NORMAL
+                SensorManager.SENSOR_DELAY_GAME
             )
         }
 
