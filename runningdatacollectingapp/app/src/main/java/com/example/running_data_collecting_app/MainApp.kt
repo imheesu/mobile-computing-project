@@ -102,7 +102,7 @@ fun MainApp(
             )
         },
     ) {
-        if (permissionState.allPermissionsGranted) {
+        if (true) {
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
