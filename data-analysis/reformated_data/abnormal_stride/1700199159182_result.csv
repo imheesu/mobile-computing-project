@@ -1,1 +1,5 @@
-timestamp,x_accelerometer,y_accelerometer,z_accelerometer,gender,height,x_gyroscope,y_gyroscope,z_gyroscope
+timestamp,second,x_accelerometer,y_accelerometer,z_accelerometer,x_gyroscope,y_gyroscope,z_gyroscope,gender,height
+1700199080603.0,0.0,-0.56982,-7.086837,1.1492168,0.21502456,-0.67073005,0.27977628,Male,170.0
+1700199080604.0,0.001,-0.5315128,-9.0476885,1.541866,-0.15515977,-1.0250319,0.344528,Male,170.0
+1700199080607.0,0.004,-0.4333505,-11.226412,1.6400281,-0.49480084,-1.7116444,0.51068336,Male,170.0
+1700199080606.0,0.003,-5.3725886,-16.230293,-0.4189853,-0.44593164,-1.3817772,0.39584067,Male,170.0
