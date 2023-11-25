@@ -1,2 +1,2 @@
-timestamp,second,x_accelerometer,y_accelerometer,z_accelerometer,x_gyroscope,y_gyroscope,z_gyroscope,gender,height
-1700460576891.0,0.0,-6.493075,-16.335638,-5.2049947,-0.204029,-3.3988543,0.9016371,Female,160.0
+timestamp,second,group,x_accelerometer,y_accelerometer,z_accelerometer,x_gyroscope,y_gyroscope,z_gyroscope,gender,height
+1700460576891.0,0.0,0,-6.493075,-16.335638,-5.2049947,-0.204029,-3.3988543,0.9016371,Female,160.0
