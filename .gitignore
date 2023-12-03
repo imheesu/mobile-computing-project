@@ -36,14 +36,12 @@ build/
 *.pyd
 *.so
 *.dll
-*.h5
 *.pb
 *.tflite
 *.lite
 *.onnx
 *.mlmodel
 *.pt
-*.pth
 *.ckpt
 *.ckpt.*
 *.model
