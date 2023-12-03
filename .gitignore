@@ -41,7 +41,6 @@ build/
 *.lite
 *.onnx
 *.mlmodel
-*.pt
 *.ckpt
 *.ckpt.*
 *.model
