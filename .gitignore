@@ -45,7 +45,6 @@ build/
 *.ckpt.*
 *.model
 *.model.*
-*.pkl
 *.joblib
 *.dill
 *.pickle
