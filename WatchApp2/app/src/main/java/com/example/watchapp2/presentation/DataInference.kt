@@ -62,13 +62,18 @@ class DataInference (context: Context) {
     }
 
     fun runInference() : FloatArray? {
-        // run inference every 20 data points
-        if (dataCount >= 80 && dataCount % 20 == 0) {
+        // run inference every 10 data points
+        if (dataCount >= 80 && dataCount % 15 == 0) {
             Log.d("DataInference debug", "Running inference at dataCount: $dataCount")
             // data to be fed into the model is the last 80 data points
             val inferenceData = sensorDataList.takeLast(80)
+            // get the largest acc and gyro values
+            val normalizationFactor = findNormalizationFactor(inferenceData)
+            // normalize the data
+            val normalizedData = inferenceData.map { it.normalize(normalizationFactor[0], normalizationFactor[1]) }
+
             // convert the data into a (1, 80, 6) tensor
-            val inputData = inferenceData.flatMap { it.getAccelerometer().toList() + it.getGyroscope().toList() }.toFloatArray()
+            val inputData = normalizedData.flatMap { it.getAccelerometer().toList() + it.getGyroscope().toList() }.toFloatArray()
             val inputTensor = Tensor.fromBlob(inputData, longArrayOf(1, 80, 6))
             // run inference
             val outputTensor = module!!.forward(IValue.from(inputTensor)).toTensor()
@@ -93,6 +98,23 @@ class DataInference (context: Context) {
             }
         }
         return floatArrayOf(maxIndex.toFloat(), maxValue)
+    }
+
+    private fun findNormalizationFactor(dataset: List<SensorData>): FloatArray {
+        // find the largest acc and gyro values in the sensor data list
+        var maxAcc = Float.MIN_VALUE
+        var maxGyro = Float.MIN_VALUE
+        for (sensorData in dataset) {
+            val acc = sensorData.getAccelerometer().maxOrNull() ?: 0.0f
+            val gyro = sensorData.getGyroscope().maxOrNull() ?: 0.0f
+            if (acc > maxAcc) {
+                maxAcc = acc
+            }
+            if (gyro > maxGyro) {
+                maxGyro = gyro
+            }
+        }
+        return floatArrayOf(maxAcc, maxGyro)
     }
 
 }

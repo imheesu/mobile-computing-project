@@ -97,7 +97,8 @@ fun MainUI(viewModel: MainViewModel) {
 
         // Cleanup: Unregister the listener when the LaunchedEffect is disposed
         onDispose {
-            sensorManager.unregisterListener(sensorEventListener)
+            sensorManager.unregisterListener(sensorEventListener, accelerometerSensor)
+            sensorManager.unregisterListener(sensorEventListener, gyroscopeSensor)
             viewModel.resetSensorDataList()
         }
     }
