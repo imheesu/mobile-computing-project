@@ -10,7 +10,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import com.example.watch_app.presentation.MainUI
 
 class MainActivity : ComponentActivity() {
     private val viewModel by viewModels<MainViewModel>()

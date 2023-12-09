@@ -1,4 +1,4 @@
-package com.example.watch_app.presentation
+package com.example.watchapp2.presentation
 
 import android.content.Context
 import android.hardware.Sensor
@@ -9,13 +9,16 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
@@ -27,6 +30,7 @@ import com.example.watchapp2.presentation.theme.AppTheme
 fun MainUI(viewModel: MainViewModel) {
     val isStarted = viewModel.isStarted
     val context = LocalContext.current
+
     // float array to store accelerometer data
     var accelerometerData = floatArrayOf(0f, 0f, 0f)
     var gyroscopeData = floatArrayOf(0f, 0f, 0f)
@@ -42,13 +46,12 @@ fun MainUI(viewModel: MainViewModel) {
                 Sensor.TYPE_ACCELEROMETER -> {
                     val accelerometer = event.values
                     accelerometerData = accelerometer
-                    Log.d("MainUI debug", "Accelerometer changed at $timestamp!")
+//                    Log.d("MainUI debug", "Accelerometer changed at $timestamp!")
                 }
 
                 Sensor.TYPE_GYROSCOPE -> {
                     val gyroscope = event.values
                     gyroscopeData = gyroscope
-                    Log.d("MainUI debug", "Gyroscope changed at $timestamp!")
                 }
             }
             viewModel.handleSensorData(accelerometerData, gyroscopeData, timestamp)
@@ -119,21 +122,19 @@ fun MainUI(viewModel: MainViewModel) {
                 .background(MaterialTheme.colors.background),
         ) {
             if (isStarted) {
-                Text(text = "Status: ${viewModel.runningPosture}")
-                Text(text = viewModel.statusDetail)
+                Text(text = "Posture: ${viewModel.runningPosture}")
                 Button(onClick = {viewModel.isStarted = false}) {
                     Text(text = "Stop")
                 }
+                Text(text = "Confidence: ${viewModel.statusDetail}")
             } else {
                 Text(text = "Start running!")
+                // add a space between text and button
+                Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = { viewModel.isStarted = true }) {
                     Text(text = "Start")
                 }
             }
         }
     }
-}
-
-fun onDispose(function: () -> Unit) {
-
 }
