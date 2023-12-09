@@ -47,14 +47,14 @@ class DataInference (context: Context) {
         if (sensorDataList.size > 0 && sensorData.getTimestamp() == sensorDataList.last().getTimestamp()) {
             // if the new sensor data has the same timestamp as the last one, then replace the last one with the new one
             sensorDataList[sensorDataList.size - 1] = sensorData
-            Log.d("DataInference debug", "Replacing lastSensorData with newSensorData")
+//            Log.d("DataInference debug", "Replacing lastSensorData with newSensorData")
         } else {
             // if the new sensor data has a different timestamp as the last one, then add the new one to the list
             sensorDataList.add(sensorData)
             dataCount += 1
-            Log.d("DataInference debug", "Adding newSensorData to the list")
+//            Log.d("DataInference debug", "Adding newSensorData to the list")
         }
-        Log.d("DataInference debug", "sensorData #$dataCount: $sensorData")
+//        Log.d("DataInference debug", "sensorData #$dataCount: $sensorData")
     }
 
     fun resetSensorDataList() {
@@ -62,8 +62,8 @@ class DataInference (context: Context) {
     }
 
     fun runInference() : FloatArray? {
-        // run inference every 10 data points
-        if (dataCount >= 80 && dataCount % 10 == 0) {
+        // run inference every 20 data points
+        if (dataCount >= 80 && dataCount % 20 == 0) {
             Log.d("DataInference debug", "Running inference at dataCount: $dataCount")
             // data to be fed into the model is the last 80 data points
             val inferenceData = sensorDataList.takeLast(80)

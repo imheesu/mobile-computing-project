@@ -11,8 +11,9 @@ import androidx.lifecycle.AndroidViewModel
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     var isStarted by mutableStateOf(false)
-    var runningPosture by mutableStateOf("undefined")
-    var statusDetail by mutableStateOf("undefined")
+    var runningPosture by mutableStateOf("Running...")
+    var statusDetail by mutableStateOf("0.0")
+    var isVibrated by mutableStateOf(false)
 
     @SuppressLint("StaticFieldLeak")
     val context: Context = application.applicationContext
@@ -25,6 +26,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val result = dataInference.runInference()
         if (result != null) {
             val predictedClass = result[0].toInt()
+            isVibrated = predictedClass != 3
             runningPosture = labels[predictedClass]
             // only represent the 3 significant digits
             val decimalFormat = "%.3f"

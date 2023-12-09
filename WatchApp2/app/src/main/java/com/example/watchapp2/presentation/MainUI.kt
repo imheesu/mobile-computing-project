@@ -5,6 +5,8 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +34,13 @@ fun MainUI(viewModel: MainViewModel) {
     var accelerometerData = floatArrayOf(0f, 0f, 0f)
     var gyroscopeData = floatArrayOf(0f, 0f, 0f)
 
+    // Vibrate the watch if the posture is abnormal
+    val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    if (viewModel.isVibrated) {
+        vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE))
+        viewModel.isVibrated = false
+    }
+
     // Add sensor event listener
     val sensorEventListener = object : SensorEventListener {
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
@@ -52,20 +61,6 @@ fun MainUI(viewModel: MainViewModel) {
                 }
             }
             viewModel.handleSensorData(accelerometerData, gyroscopeData, timestamp)
-//            val newSensorData = SensorData(timestamp, accelerometerData, gyroscopeData)
-//            // check if the new sensor data has the same timestamp as the last one
-//            if (lastSensorData != null && newSensorData.getTimestamp() == lastSensorData!!.getTimestamp()) {
-//                // if the new sensor data has the same timestamp as the last one, then replace the last one with the new one
-//                lastSensorData = newSensorData
-//                // update the sensor data list
-//                Log.d("MainUI debug", "Replacing lastSensorData with newSensorData")
-//            } else {
-//                // if the new sensor data has a different timestamp as the last one, then add the new one to the list
-//                lastSensorData = newSensorData
-//                Log.d("MainUI debug", "Adding newSensorData to the list")
-//            }
-//            Log.d("MainUI debug", "lastSensorData: $lastSensorData")
-
 
         }
     }

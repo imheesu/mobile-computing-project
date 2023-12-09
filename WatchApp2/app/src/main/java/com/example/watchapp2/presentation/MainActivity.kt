@@ -19,4 +19,5 @@ class MainActivity : ComponentActivity() {
             MainUI(viewModel)
         }
     }
+
 }
