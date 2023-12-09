@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -22,8 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
-import com.example.watchapp2.presentation.MainViewModel
-import com.example.watchapp2.presentation.SensorData
 import com.example.watchapp2.presentation.theme.AppTheme
 
 @Composable
@@ -122,10 +119,12 @@ fun MainUI(viewModel: MainViewModel) {
                 .background(MaterialTheme.colors.background),
         ) {
             if (isStarted) {
-                Text(text = "Posture: ${viewModel.runningPosture}")
+                Text(text = viewModel.runningPosture)
+                Spacer(modifier = Modifier.height(16.dp))
                 Button(onClick = {viewModel.isStarted = false}) {
                     Text(text = "Stop")
                 }
+                Spacer(modifier = Modifier.height(16.dp))
                 Text(text = "Confidence: ${viewModel.statusDetail}")
             } else {
                 Text(text = "Start running!")

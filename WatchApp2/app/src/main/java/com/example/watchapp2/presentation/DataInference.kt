@@ -2,14 +2,17 @@ package com.example.watchapp2.presentation
 
 import android.content.Context
 import android.util.Log
+import org.pytorch.IValue
 import org.pytorch.LiteModuleLoader
 import org.pytorch.Module
+import org.pytorch.Tensor
 import java.io.File
 import java.io.FileOutputStream
 
 class DataInference (context: Context) {
     private var module: Module? = null
     private var sensorDataList = arrayListOf<SensorData>()
+    private var dataCount : Int = 0
 
     init {
         if (module == null) {
@@ -48,17 +51,48 @@ class DataInference (context: Context) {
         } else {
             // if the new sensor data has a different timestamp as the last one, then add the new one to the list
             sensorDataList.add(sensorData)
+            dataCount += 1
             Log.d("DataInference debug", "Adding newSensorData to the list")
         }
+        Log.d("DataInference debug", "sensorData #$dataCount: $sensorData")
     }
 
     fun resetSensorDataList() {
         sensorDataList.clear()
     }
 
-    fun runInference() {
-
+    fun runInference() : FloatArray? {
+        // run inference every 10 data points
+        if (dataCount >= 80 && dataCount % 10 == 0) {
+            Log.d("DataInference debug", "Running inference at dataCount: $dataCount")
+            // data to be fed into the model is the last 80 data points
+            val inferenceData = sensorDataList.takeLast(80)
+            // convert the data into a (1, 80, 6) tensor
+            val inputData = inferenceData.flatMap { it.getAccelerometer().toList() + it.getGyroscope().toList() }.toFloatArray()
+            val inputTensor = Tensor.fromBlob(inputData, longArrayOf(1, 80, 6))
+            // run inference
+            val outputTensor = module!!.forward(IValue.from(inputTensor)).toTensor()
+            val outputArray = outputTensor.dataAsFloatArray
+            // get the predicted posture index
+            val predictedResult = findPredictedPosture(outputArray)
+            Log.d("DataInference debug", "outputArray: ${outputArray.contentToString()}")
+            Log.d("DataInference debug", "predictedPosture: ${predictedResult.contentToString()}")
+            return predictedResult
+        }
+        return null
     }
 
+    private fun findPredictedPosture(outputArray: FloatArray): FloatArray {
+        // find the index of the max value and its value in the output array
+        var maxIndex = 0
+        var maxValue = 0.0f
+        for (i in outputArray.indices) {
+            if (outputArray[i] > maxValue) {
+                maxIndex = i
+                maxValue = outputArray[i]
+            }
+        }
+        return floatArrayOf(maxIndex.toFloat(), maxValue)
+    }
 
 }
