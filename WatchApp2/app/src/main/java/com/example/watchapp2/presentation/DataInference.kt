@@ -62,8 +62,8 @@ class DataInference (context: Context) {
     }
 
     fun runInference() : FloatArray? {
-        // run inference every 10 data points
-        if (dataCount >= 80 && dataCount % 15 == 0) {
+        // run inference every 40 data points
+        if (dataCount >= 80 && dataCount % 40 == 0) {
             Log.d("DataInference debug", "Running inference at dataCount: $dataCount")
             // data to be fed into the model is the last 80 data points
             val inferenceData = sensorDataList.takeLast(80)
@@ -71,12 +71,13 @@ class DataInference (context: Context) {
             val normalizationFactor = findNormalizationFactor(inferenceData)
             // normalize the data
             val normalizedData = inferenceData.map { it.normalize(normalizationFactor[0], normalizationFactor[1]) }
-
+            Log.d("DataInference debug", "Check whether normalized data is out: ${normalizedData[0]}")
             // convert the data into a (1, 80, 6) tensor
             val inputData = normalizedData.flatMap { it.getAccelerometer().toList() + it.getGyroscope().toList() }.toFloatArray()
             val inputTensor = Tensor.fromBlob(inputData, longArrayOf(1, 80, 6))
             // run inference
             val outputTensor = module!!.forward(IValue.from(inputTensor)).toTensor()
+            Log.d("DataInference debug", "outputTensor: ${outputTensor.dataAsFloatArray.contentToString()}")
             val outputArray = outputTensor.dataAsFloatArray
             // get the predicted posture index
             val predictedResult = findPredictedPosture(outputArray)
@@ -102,11 +103,11 @@ class DataInference (context: Context) {
 
     private fun findNormalizationFactor(dataset: List<SensorData>): FloatArray {
         // find the largest acc and gyro values in the sensor data list
-        var maxAcc = Float.MIN_VALUE
-        var maxGyro = Float.MIN_VALUE
+        var maxAcc = -100.0f
+        var maxGyro = -100.0f
         for (sensorData in dataset) {
-            val acc = sensorData.getAccelerometer().maxOrNull() ?: 0.0f
-            val gyro = sensorData.getGyroscope().maxOrNull() ?: 0.0f
+            val acc = sensorData.getAccelerometer().maxOrNull() ?: maxGyro
+            val gyro = sensorData.getGyroscope().maxOrNull() ?: maxAcc
             if (acc > maxAcc) {
                 maxAcc = acc
             }

@@ -19,6 +19,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val context: Context = application.applicationContext
     private var dataInference: DataInference = DataInference(context)
     private var labels = arrayOf("Abnormal arm swing", "Abnormal stride", "Abnormal upper body", "Good posture")
+    private var prevPredictedClass:Int? = null
 
     fun handleSensorData(accelData: FloatArray, gyroData: FloatArray, timestamp: Long) {
         val newSensorData = SensorData(timestamp, accelData, gyroData)
@@ -26,11 +27,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         val result = dataInference.runInference()
         if (result != null) {
             val predictedClass = result[0].toInt()
-            isVibrated = predictedClass != 3
-            runningPosture = labels[predictedClass]
-            // only represent the 3 significant digits
-            val decimalFormat = "%.3f"
-            statusDetail = decimalFormat.format(result[1])
+            if (prevPredictedClass!=null && prevPredictedClass == predictedClass) {
+                isVibrated = predictedClass != 3
+                runningPosture = labels[predictedClass]
+                // only represent the 3 significant digits
+                val decimalFormat = "%.3f"
+                statusDetail = decimalFormat.format(result[1])
+            }
+            prevPredictedClass = predictedClass
+//            isVibrated = predictedClass != 3
+//            runningPosture = labels[predictedClass]
+//            // only represent the 3 significant digits
+//            val decimalFormat = "%.3f"
+//            statusDetail = decimalFormat.format(result[1])
         }
     }
 

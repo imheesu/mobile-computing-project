@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.wear.ambient.AmbientLifecycleObserver
 import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
@@ -77,7 +78,7 @@ fun MainUI(viewModel: MainViewModel) {
                 sensorManager.registerListener(
                     sensorEventListener,
                     accelerometerSensor,
-                    SensorManager.SENSOR_DELAY_NORMAL
+                    SensorManager.SENSOR_DELAY_GAME
                 )
             }
 
@@ -85,7 +86,7 @@ fun MainUI(viewModel: MainViewModel) {
                 sensorManager.registerListener(
                     sensorEventListener,
                     gyroscopeSensor,
-                    SensorManager.SENSOR_DELAY_NORMAL
+                    SensorManager.SENSOR_DELAY_GAME
                 )
             }
         } else {
